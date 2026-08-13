@@ -1,77 +1,269 @@
-html {
-	font-family: Helvetica;
-	background-color: #DDD;
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=EB+Garamond:wght@400;600&display=swap');
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #232a1c;
+	font-family: 'EB Garamond', Georgia, serif;
+	color: #f1eee0;
+	padding: 40px 20px 80px;
 }
 
 .container {
-	max-width: 1200px;
+	max-width: 720px;
+	margin: 0 auto;
+	background-color: #2d3524;
+	border: 1px solid rgba(168, 195, 152, 0.25);
+	border-radius: 18px;
+	padding: 60px 50px;
 	position: relative;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 20px 50px;
-	margin: 50px;
-	background-color: #FFF;
 }
 
-.destaque {
-	font-weight: bold;
+.container::before {
+	content: "";
+	position: absolute;
+	top: 12px;
+	left: 12px;
+	right: 12px;
+	bottom: 12px;
+	border: 1px solid rgba(168, 195, 152, 0.15);
+	border-radius: 10px;
+	pointer-events: none;
 }
 
-/* cabecalho */
+/* CABEÇALHO */
 
 .cabecalho {
 	text-align: center;
+	margin-bottom: 50px;
 }
 
 .titulo-principal {
-	font-size: 40px;
+	font-family: 'Cormorant Garamond', serif;
+	font-weight: 600;
+	font-size: 64px;
+	letter-spacing: 6px;
+	text-transform: uppercase;
+	color: #f1eee0;
 }
 
 .paragrafo-principal {
 	font-style: italic;
+	font-size: 18px;
+	color: #cfd8bf;
+	margin-top: 12px;
+	letter-spacing: 0.5px;
 }
 
-/* corpo do site */
+/* DIVISOR ESTILO MAPA (linha + círculo, no lugar da borda simples) */
+
+.divisor {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin: 45px 0;
+}
+
+.divisor .linha {
+	flex: 1;
+	height: 1px;
+	background-color: #a8c398;
+	opacity: 0.55;
+}
+
+.divisor .ponto {
+	font-size: 16px;
+	color: #a8c398;
+	line-height: 1;
+	display: inline-block;
+}
+
+/* IMAGENS DE DESTAQUE */
 
 .img-destaque {
 	text-align: center;
-	margin-top: 30px;
+	margin: 45px 0;
 }
 
-/* biografia container */
+.img-destaque img {
+	max-width: 100%;
+	border-radius: 16px;
+	border: 1px solid rgba(168, 195, 152, 0.4);
+	box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+}
+
+.img-destaque figcaption {
+	font-style: italic;
+	font-size: 13px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #a8c398;
+	margin-top: 16px;
+}
+
+/* BIOGRAFIA */
 
 .biografia-container {
-	padding: 25px 0;
-	margin: 25px 0;
-	border-top: 1px dashed #DDD;
-	border-bottom: 1px dashed #DDD;
+	padding: 10px 0 35px;
 }
 
-/* citações */
-
-.frase-container {
-	background-color: #DDD;
-	padding: 30px;
-}
-
-.frase-container blockquote {
+.biografia-container h2 {
+	font-family: 'Cormorant Garamond', serif;
 	font-weight: 600;
-	font-size: 30px;
+	font-size: 28px;
+	letter-spacing: 1px;
+	color: #f1eee0;
+	margin-bottom: 18px;
 }
 
-.frase-container p {
+.biografia-container .eyebrow {
+	display: block;
+	font-size: 12px;
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	color: #a8c398;
+	margin-bottom: 8px;
+}
+
+.biografia-container p {
+	font-size: 17px;
+	line-height: 1.8;
+	margin-bottom: 16px;
+	color: #dfe2ce;
+}
+
+.biografia-container a {
+	color: #c3dab0;
+	font-weight: 600;
+	text-decoration: underline;
+}
+
+.biografia-container a:hover {
+	color: #a8c398;
+}
+
+.destaque {
+	color: #c3dab0;
+	font-weight: 600;
 	font-style: italic;
 }
 
-/* curiosidades */
+/* CITAÇÕES */
+
+.frase-container {
+	text-align: center;
+	padding: 10px 20px 35px;
+}
+
+.frase-container blockquote {
+	font-family: 'Cormorant Garamond', serif;
+	font-style: italic;
+	font-size: 26px;
+	line-height: 1.5;
+	color: #f1eee0;
+	max-width: 500px;
+	margin: 0 auto 14px;
+}
+
+.frase-container p {
+	font-size: 12px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: #a8c398;
+}
+
+/* CURIOSIDADES */
 
 .curiosidades-container {
-	padding: 25px 0;
-	margin: 25px 0;
-	border-top: 1px dashed #DDD;
-	border-bottom: 1px dashed #DDD;
+	padding: 10px 0 35px;
+}
+
+.curiosidades-container h2 {
+	font-family: 'Cormorant Garamond', serif;
+	font-weight: 600;
+	font-size: 28px;
+	letter-spacing: 1px;
+	color: #f1eee0;
+	margin-bottom: 18px;
+}
+
+.curiosidades-container ul {
+	list-style: none;
 }
 
 .curiosidades-container li {
-	height: 30px;
+	font-size: 17px;
+	line-height: 1.9;
+	color: #dfe2ce;
+	padding-left: 22px;
+	position: relative;
+}
+
+.curiosidades-container li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 12px;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background-color: #a8c398;
+}
+
+/* TRACKLIST */
+
+.tracklist {
+	list-style: none;
+	border: 1px solid rgba(168, 195, 152, 0.25);
+	border-radius: 12px;
+	padding: 6px 18px;
+}
+
+.tracklist li {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px 0;
+	border-bottom: 1px dashed rgba(168, 195, 152, 0.25);
+	font-size: 16px;
+}
+
+.tracklist li:last-child {
+	border-bottom: none;
+}
+
+.track-nome {
+	color: #f1eee0;
+}
+
+.track-tempo {
+	color: #a8c398;
+	font-style: italic;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+	.container {
+		padding: 40px 24px;
+		border-radius: 12px;
+	}
+
+	.titulo-principal {
+		font-size: 42px;
+		letter-spacing: 3px;
+	}
+
+	.frase-container blockquote {
+		font-size: 21px;
+	}
+
+	.tracklist li {
+		font-size: 14px;
+	}
+
 }
