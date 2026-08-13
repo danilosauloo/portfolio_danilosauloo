@@ -4,9 +4,19 @@ Repositório com projetos práticos de HTML e CSS, feitos durante meus estudos d
 
 ## Projetos
 
-- **[Página Tributo](https://danilosauloo.github.io/portfolio_danilosauloo/3_PROJETO_PAGINA_TRIBUTO/)** — prática de estrutura HTML e estilização básica
-- **[Formulário de Contato](https://danilosauloo.github.io/portfolio_danilosauloo/4_PROJETO_FORMULARIO/)** — inputs, labels e validação de formulário
-- **[Página de Agência](https://danilosauloo.github.io/portfolio_danilosauloo/5_PROJETO_PAGINA_AGENCIA/)** — layout com flexbox
-- **[Clone do Google](https://danilosauloo.github.io/portfolio_danilosauloo/6_PROJETO_GOOGLE/)** — replicação de interface real, posicionamento e detalhes finos de CSS
-- **[Página de Contato](https://danilosauloo.github.io/portfolio_danilosauloo/7_PROJETO_PAGINA_DE_CONTATO/)** — formulário com imagem de fundo e box model
-- **[Landing Page Principal](https://danilosauloo.github.io/portfolio_danilosauloo/8_LANDING_PAGE_MAIN/)** — página de apresentação completa
+- **[Página Tributo](https://danilosauloo.github.io/portfolio_danilosauloo/pagina-tributo/)** — prática de estrutura HTML e estilização básica
+- **[Formulário de Contato](https://danilosauloo.github.io/portfolio_danilosauloo/formulario-contato/)** — inputs, labels e validação de formulário
+- **[Página de Agência](https://danilosauloo.github.io/portfolio_danilosauloo/pagina-agencia/)** — layout com flexbox
+- **[Clone do Google](https://danilosauloo.github.io/portfolio_danilosauloo/clone-google/)** — replicação de interface real, posicionamento e detalhes finos de CSS
+- **[Página de Contato](https://danilosauloo.github.io/portfolio_danilosauloo/pagina-contato/)** — formulário com imagem de fundo e box model
+- **[Landing Page Principal](https://danilosauloo.github.io/portfolio_danilosauloo/landing-page/)** — página de apresentação completa
+
+## Tecnologias
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
+
+## Contato
+
+- LinkedIn: [adicione seu link aqui]
+- E-mail: [adicione seu e-mail aqui]
