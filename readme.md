@@ -4,6 +4,7 @@ Repositório com projetos práticos de HTML e CSS, feitos durante meus estudos d
 
 ## Projetos
 
+- **[App Treino](https://danilosauloo.github.io/portfolio_danilosauloo/app-treino/)** — aplicativo criado para meus treinos
 - **[Página Jão](https://danilosauloo.github.io/portfolio_danilosauloo/jao-memorias-postumas/)** — tributo jão novo álbum - memórias postumas
 - **[Formulário de Contato](https://danilosauloo.github.io/portfolio_danilosauloo/formulario-contato/)** — inputs, labels e validação de formulário
 - **[Página de Agência](https://danilosauloo.github.io/portfolio_danilosauloo/pagina-agencia/)** — layout com flexbox
