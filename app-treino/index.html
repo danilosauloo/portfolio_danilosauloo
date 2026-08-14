@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treino — Danilo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070b09;
+    --bg-soft:#0c1310;
+    --card:#111a16;
+    --card-border:rgba(255,255,255,0.06);
+    --ink:#eef4f1;
+    --ink-dim:#8ea69b;
+    --ink-faint:#5c7169;
+    --accent:#43ff7a;
+    --accent-dim:#1c3a26;
+    --amber:#e0ab4d;
+    --amber-bg:#332a15;
+    --red:#ea6a52;
+    --red-bg:#3a1d16;
+    --icon-bg:#f4f2ea;
+    --icon-ink:#161616;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 50% -10%, #10201a 0%, var(--bg) 55%);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    display:flex; justify-content:center;
+    min-height:100vh;
+    padding:0;
+  }
+  .phone{
+    width:100%; max-width:430px;
+    min-height:100vh;
+    background:var(--bg);
+    position:relative;
+    display:flex; flex-direction:column;
+    border-left:1px solid var(--card-border);
+    border-right:1px solid var(--card-border);
+  }
+
+  /* header */
+  .app-header{
+    padding:22px 20px 14px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .app-title{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:20px; font-weight:700; letter-spacing:0.2px;
+  }
+  .app-title span{color:var(--accent);}
+  .app-sub{color:var(--ink-faint); font-size:12px; margin-top:2px; font-weight:500;}
+  .streak{
+    display:flex; align-items:center; gap:6px;
+    background:var(--card); border:1px solid var(--card-border);
+    padding:8px 12px; border-radius:100px; font-size:12px; color:var(--ink-dim); font-weight:600;
+  }
+  .streak b{color:var(--accent); font-weight:700;}
+
+  /* tabs */
+  .tabs{
+    display:flex; gap:8px; overflow-x:auto;
+    padding:4px 20px 16px;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:0 0 auto;
+    padding:10px 16px;
+    border-radius:100px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    color:var(--ink-dim);
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600; font-size:13px;
+    cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:1px;
+    transition:all .15s ease;
+    white-space:nowrap;
+  }
+  .tab .d{font-size:13px;}
+  .tab .m{font-size:9.5px; font-weight:500; opacity:.75; text-transform:uppercase; letter-spacing:.04em;}
+  .tab.active{
+    background:var(--accent); color:#08150d; border-color:var(--accent);
+  }
+  .tab.active .m{color:#0a2416;}
+
+  /* day header */
+  .day-panel{display:none; padding:0 20px 120px; animation:fade .25s ease;}
+  .day-panel.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+
+  .day-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .day-head h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:19px; margin:0; font-weight:700;
+  }
+  .day-count{color:var(--ink-faint); font-size:12px; font-weight:600;}
+
+  .muscle-row{
+    display:flex; gap:8px; overflow-x:auto; padding-bottom:16px; margin-bottom:16px;
+    border-bottom:1px solid var(--card-border);
+    scrollbar-width:none;
+  }
+  .muscle-row::-webkit-scrollbar{display:none;}
+  .muscle-chip{
+    flex:0 0 auto;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    width:64px;
+  }
+  .muscle-chip .badge{
+    width:52px; height:52px; border-radius:14px;
+    background:var(--card-border);
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(160deg,#182420,#0d1512);
+    border:1px solid var(--card-border);
+  }
+  .muscle-chip span{font-size:9.5px; color:var(--ink-dim); font-weight:600; text-align:center;}
+
+  /* exercise list */
+  .ex-section-label{
+    font-size:11px; letter-spacing:.08em; color:var(--ink-faint);
+    text-transform:uppercase; font-weight:700; margin:18px 0 8px;
+  }
+  .ex-card{
+    display:flex; gap:12px; align-items:center;
+    padding:12px 4px;
+    border-bottom:1px solid var(--card-border);
+    cursor:pointer;
+  }
+  .ex-card:last-child{border-bottom:none;}
+  .ex-thumb{
+    width:58px; height:58px; border-radius:14px;
+    background:var(--icon-bg);
+    position:relative; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    overflow:visible;
+  }
+  .ex-thumb svg.pict{width:38px; height:38px;}
+  .muscle-tag{
+    position:absolute; bottom:-6px; right:-6px;
+    width:26px; height:26px; border-radius:8px;
+    background:#0d1a14; border:1px solid var(--card-border);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .muscle-tag svg{width:16px; height:16px;}
+
+  .ex-info{flex:1; min-width:0;}
+  .ex-tag{
+    display:inline-block; font-size:9.5px; font-weight:700;
+    padding:3px 8px; border-radius:6px; letter-spacing:.03em;
+    margin-bottom:5px; text-transform:uppercase;
+  }
+  .ex-tag.warm{background:var(--amber-bg); color:var(--amber);}
+  .ex-tag.drop{background:var(--red-bg); color:var(--red);}
+  .ex-name{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:14.5px; font-weight:600; line-height:1.25;
+    margin-bottom:4px;
+  }
+  .ex-meta{font-size:12px; color:var(--ink-dim); font-weight:500;}
+  .ex-meta b{color:var(--ink-dim); font-weight:600;}
+  .ex-meta .dot{margin:0 5px; opacity:.5;}
+  .ex-check{
+    width:22px; height:22px; border-radius:50%;
+    border:1.5px solid var(--card-border);
+    flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .15s ease;
+  }
+  .ex-check svg{width:12px;height:12px; opacity:0; transition:opacity .15s ease;}
+  .ex-card.done .ex-check{background:var(--accent); border-color:var(--accent);}
+  .ex-card.done .ex-check svg{opacity:1;}
+  .ex-card.done .ex-name{color:var(--ink-dim); text-decoration:line-through; text-decoration-color:var(--ink-faint);}
+
+  .finisher-card{
+    display:flex; gap:12px; align-items:center; padding:12px 4px;
+  }
+
+  /* footer button */
+  .footer-bar{
+    position:sticky; bottom:0; left:0; right:0;
+    padding:14px 20px calc(18px + env(safe-area-inset-bottom));
+    background:linear-gradient(0deg, var(--bg) 55%, rgba(7,11,9,0));
+    display:flex; gap:10px; align-items:center;
+    margin-top:-90px;
+  }
+  .progress-pill{
+    flex:0 0 auto; width:46px; height:46px; border-radius:50%;
+    background:var(--card); border:1px solid var(--card-border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; color:var(--accent);
+  }
+  .start-btn{
+    flex:1;
+    background:var(--accent);
+    color:#08150d;
+    border:none; border-radius:100px;
+    padding:16px; font-family:'Space Grotesk',sans-serif;
+    font-weight:700; font-size:14.5px; letter-spacing:.03em;
+    text-transform:uppercase;
+    cursor:pointer;
+    box-shadow:0 8px 24px -8px rgba(67,255,122,0.45);
+    transition:transform .12s ease;
+  }
+  .start-btn:active{transform:scale(0.97);}
+
+  ::selection{background:var(--accent); color:#08150d;}
+</style>
+</head>
+<body>
+
+<!-- ============ ICON LIBRARY ============ -->
+<svg width="0" height="0" style="position:absolute">
+<defs>
+
+<symbol id="p-row-machine" viewBox="0 0 100 100">
+  <rect x="8" y="60" width="34" height="6" rx="2" fill="#c8c4b4"/>
+  <rect x="10" y="40" width="6" height="26" rx="2" fill="#c8c4b4"/>
+  <circle cx="58" cy="34" r="7" fill="#161616"/>
+  <path d="M58 41 C50 46 47 55 52 64" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M52 64 L40 70" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M55 47 L36 44" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M56 50 L74 40" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M60 63 L72 78" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M55 66 L48 82" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-pulldown" viewBox="0 0 100 100">
+  <rect x="30" y="8" width="4" height="18" fill="#c8c4b4"/>
+  <rect x="20" y="24" width="24" height="4" rx="2" fill="#c8c4b4"/>
+  <circle cx="50" cy="34" r="7" fill="#161616"/>
+  <path d="M50 41 L50 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 47 L34 27" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 47 L66 27" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 66 L38 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 66 L62 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="40" y="70" width="20" height="10" rx="3" fill="#161616" opacity="0"/>
+</symbol>
+
+<symbol id="p-curl-db" viewBox="0 0 100 100">
+  <circle cx="46" cy="26" r="7" fill="#161616"/>
+  <path d="M46 33 L44 62" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 62 L30 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 62 L58 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M45 40 L60 30" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M45 40 L52 60" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="45" y="56" width="14" height="7" rx="3" fill="#161616"/>
+  <path d="M46 40 L28 46" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="22" y="43" width="7" height="7" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-cable-curl" viewBox="0 0 100 100">
+  <rect x="30" y="8" width="4" height="16" fill="#c8c4b4"/>
+  <circle cx="52" cy="30" r="7" fill="#161616"/>
+  <path d="M52 37 L50 64" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 64 L38 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 64 L62 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M51 44 L34 24" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M51 44 L68 50" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="30" y="42" width="8" height="7" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-chest-press-db" viewBox="0 0 100 100">
+  <rect x="14" y="66" width="72" height="10" rx="4" fill="#c8c4b4"/>
+  <circle cx="42" cy="42" r="7" fill="#161616"/>
+  <path d="M42 49 L40 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M40 66 L30 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M40 66 L52 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M42 54 L64 44" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="60" y="38" width="8" height="8" rx="2" fill="#161616"/>
+  <path d="M42 54 L64 62" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="60" y="58" width="8" height="8" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-chest-fly-db" viewBox="0 0 100 100">
+  <rect x="14" y="66" width="72" height="10" rx="4" fill="#c8c4b4"/>
+  <circle cx="50" cy="42" r="7" fill="#161616"/>
+  <path d="M50 49 L48 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 66 L38 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 66 L58 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 54 C40 50 30 48 22 52" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="14" y="48" width="8" height="8" rx="2" fill="#161616"/>
+  <path d="M50 54 C60 50 70 48 78 52" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="78" y="48" width="8" height="8" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-chest-fly-machine" viewBox="0 0 100 100">
+  <rect x="30" y="20" width="6" height="60" rx="2" fill="#c8c4b4"/>
+  <circle cx="46" cy="32" r="7" fill="#161616"/>
+  <path d="M46 39 L44 68" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 68 L34 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 68 L54 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 46 C58 40 66 42 70 50" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 50 C56 56 62 56 68 60" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-chest-press-machine" viewBox="0 0 100 100">
+  <rect x="26" y="18" width="6" height="62" rx="2" fill="#c8c4b4"/>
+  <circle cx="46" cy="32" r="7" fill="#161616"/>
+  <path d="M46 39 L44 68" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 68 L34 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 68 L54 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 46 L72 44" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 50 L72 58" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="70" y="40" width="7" height="22" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-crossover" viewBox="0 0 100 100">
+  <rect x="6" y="14" width="5" height="70" fill="#c8c4b4"/>
+  <rect x="89" y="14" width="5" height="70" fill="#c8c4b4"/>
+  <circle cx="50" cy="34" r="7" fill="#161616"/>
+  <path d="M50 41 L48 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 66 L38 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 66 L58 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 48 C34 40 20 34 12 26" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 48 C66 40 80 34 88 26" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-shoulder-press" viewBox="0 0 100 100">
+  <circle cx="50" cy="30" r="7" fill="#161616"/>
+  <path d="M50 37 L48 68" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 68 L38 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 68 L58 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M49 44 C42 36 38 24 40 14" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="34" y="7" width="9" height="9" rx="2" fill="#161616"/>
+  <path d="M49 44 C56 36 60 24 58 14" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="55" y="7" width="9" height="9" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-lateral-raise" viewBox="0 0 100 100">
+  <circle cx="50" cy="30" r="7" fill="#161616"/>
+  <path d="M50 37 L48 68" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 68 L38 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 68 L58 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M49 46 L20 40" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="12" y="35" width="9" height="9" rx="2" fill="#161616"/>
+  <path d="M49 46 L78 40" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="79" y="35" width="9" height="9" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-front-raise" viewBox="0 0 100 100">
+  <circle cx="50" cy="30" r="7" fill="#161616"/>
+  <path d="M50 37 L48 68" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 68 L38 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 68 L58 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M49 46 C42 40 34 30 34 20" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="28" y="13" width="9" height="9" rx="2" fill="#161616"/>
+  <path d="M49 46 L60 62" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="59" y="60" width="8" height="8" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-triceps-cable" viewBox="0 0 100 100">
+  <rect x="46" y="6" width="5" height="20" fill="#c8c4b4"/>
+  <circle cx="52" cy="34" r="7" fill="#161616"/>
+  <path d="M52 41 L50 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 66 L40 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 66 L60 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M52 44 L44 30" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 30 L44 58" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-triceps-db" viewBox="0 0 100 100">
+  <circle cx="46" cy="24" r="7" fill="#161616"/>
+  <path d="M46 31 L44 62" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 62 L32 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 62 L56 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 38 C58 34 64 24 62 12" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M62 12 L62 34" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="57" y="30" width="10" height="7" rx="3" fill="#161616"/>
+</symbol>
+
+<symbol id="p-row-db" viewBox="0 0 100 100">
+  <path d="M20 82 L74 44" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round" opacity=".25"/>
+  <circle cx="66" cy="38" r="7" fill="#161616"/>
+  <path d="M62 44 C50 52 42 60 34 78" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M62 44 L46 56" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 56 L28 50" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="20" y="46" width="9" height="8" rx="2" fill="#161616"/>
+  <path d="M58 48 L70 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-leg-press" viewBox="0 0 100 100">
+  <rect x="60" y="16" width="8" height="60" rx="2" fill="#c8c4b4"/>
+  <circle cx="34" cy="66" r="7" fill="#161616"/>
+  <path d="M34 73 L38 84" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M34 73 C40 66 46 60 50 50" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 50 L54 32" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 50 L58 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M58 66 L54 32" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round" opacity="0"/>
+  <rect x="52" y="26" width="10" height="10" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-leg-ext" viewBox="0 0 100 100">
+  <rect x="18" y="30" width="30" height="8" rx="3" fill="#c8c4b4"/>
+  <circle cx="48" cy="24" r="7" fill="#161616"/>
+  <path d="M48 31 L46 56" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 56 L46 66" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 66 L68 60" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="66" y="55" width="9" height="9" rx="2" fill="#161616"/>
+  <path d="M46 40 L64 44" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-leg-curl" viewBox="0 0 100 100">
+  <rect x="20" y="60" width="60" height="7" rx="3" fill="#c8c4b4"/>
+  <circle cx="30" cy="40" r="7" fill="#161616"/>
+  <path d="M32 47 L60 58" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M60 58 L60 68" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M60 68 L44 74" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="36" y="70" width="9" height="9" rx="2" fill="#161616"/>
+  <path d="M30 47 L26 62" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-adductor" viewBox="0 0 100 100">
+  <circle cx="50" cy="24" r="7" fill="#161616"/>
+  <path d="M50 31 L50 56" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 56 L38 62 L36 82" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 56 L62 62 L64 82" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 40 L34 44" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 40 L66 44" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M32 60 L68 60" stroke="#c8c4b4" stroke-width="4" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-abductor" viewBox="0 0 100 100">
+  <circle cx="50" cy="24" r="7" fill="#161616"/>
+  <path d="M50 31 L50 56" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 56 L30 66 L22 84" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 56 L70 66 L78 84" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 40 L34 44" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 40 L66 44" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M24 72 L76 72" stroke="#c8c4b4" stroke-width="4" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-hip-thrust" viewBox="0 0 100 100">
+  <rect x="10" y="66" width="26" height="9" rx="3" fill="#c8c4b4"/>
+  <circle cx="26" cy="52" r="7" fill="#161616"/>
+  <path d="M28 58 L54 62" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M54 62 L60 44" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M60 44 L60 70" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M54 62 L76 60" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="76" y="55" width="9" height="9" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-stiff" viewBox="0 0 100 100">
+  <circle cx="50" cy="22" r="7" fill="#161616"/>
+  <path d="M50 29 C46 40 42 46 40 54" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M40 54 L40 84" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M40 54 L58 60" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M40 54 L26 34" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="20" y="30" width="9" height="9" rx="2" fill="#161616"/>
+  <path d="M58 60 L58 34" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="53" y="28" width="9" height="9" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-calf" viewBox="0 0 100 100">
+  <rect x="18" y="70" width="60" height="7" rx="3" fill="#c8c4b4"/>
+  <circle cx="50" cy="26" r="7" fill="#161616"/>
+  <path d="M50 33 L48 58" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 58 L46 70" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 70 L44 84" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 42 L34 46" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 42 L66 46" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-abs" viewBox="0 0 100 100">
+  <rect x="66" y="20" width="7" height="60" rx="2" fill="#c8c4b4"/>
+  <circle cx="42" cy="30" r="7" fill="#161616"/>
+  <path d="M42 37 C40 50 42 58 48 64" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 64 L38 82" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M48 64 L58 78" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 46 L60 40" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <rect x="58" y="35" width="9" height="9" rx="2" fill="#161616"/>
+</symbol>
+
+<symbol id="p-treadmill" viewBox="0 0 100 100">
+  <rect x="10" y="72" width="66" height="8" rx="4" fill="#c8c4b4"/>
+  <rect x="66" y="40" width="5" height="34" fill="#c8c4b4"/>
+  <circle cx="46" cy="28" r="7" fill="#161616"/>
+  <path d="M46 35 L44 56" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 56 L58 72" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 56 L28 68" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 40 L60 34" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M46 40 L34 30" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-stairs" viewBox="0 0 100 100">
+  <path d="M10 80 L10 66 L28 66 L28 52 L46 52 L46 38 L64 38 L64 24 L82 24" stroke="#c8c4b4" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="56" cy="26" r="6" fill="#161616"/>
+  <path d="M56 32 L54 46" stroke="#161616" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M54 46 L64 38" stroke="#43ff7a" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M54 46 L48 60" stroke="#161616" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="p-bike" viewBox="0 0 100 100">
+  <circle cx="26" cy="70" r="14" fill="none" stroke="#c8c4b4" stroke-width="4"/>
+  <path d="M40 70 L58 40 L74 70" stroke="#c8c4b4" stroke-width="4" fill="none"/>
+  <circle cx="58" cy="28" r="7" fill="#161616"/>
+  <path d="M58 35 L52 52" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M52 52 L44 66" stroke="#43ff7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M52 52 L62 44" stroke="#161616" stroke-width="5" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<!-- muscle badges -->
+<symbol id="m-costas" viewBox="0 0 40 40"><path d="M20 4C13 4 9 9 9 15c0 5 2 8 2 12 0 5-3 6-3 9h9l3-9 3 9h9c0-3-3-4-3-9 0-4 2-7 2-12 0-6-4-11-11-11Z" fill="#43ff7a"/></symbol>
+<symbol id="m-biceps" viewBox="0 0 40 40"><circle cx="20" cy="12" r="6" fill="#2a4536"/><path d="M14 18c-3 2-4 6-3 12l3 8h12l3-8c1-6 0-10-3-12Z" fill="#43ff7a"/></symbol>
+<symbol id="m-peito" viewBox="0 0 40 40"><path d="M20 8C14 8 9 12 9 19c0 8 5 13 11 13s11-5 11-13c0-7-5-11-11-11Z" fill="#2a4536"/><path d="M20 10c-4 0-8 3-8 9 0 5 3 9 8 10 5-1 8-5 8-10 0-6-4-9-8-9Z" fill="#43ff7a"/></symbol>
+<symbol id="m-ombro" viewBox="0 0 40 40"><circle cx="12" cy="16" r="7" fill="#43ff7a"/><circle cx="28" cy="16" r="7" fill="#43ff7a"/><rect x="10" y="20" width="20" height="14" rx="6" fill="#2a4536"/></symbol>
+<symbol id="m-triceps" viewBox="0 0 40 40"><circle cx="20" cy="12" r="6" fill="#2a4536"/><path d="M15 18c-3 3-4 8-2 14l3 6h8l3-6c2-6 1-11-2-14Z" fill="#2a4536"/><path d="M20 20 L20 36" stroke="#43ff7a" stroke-width="5" stroke-linecap="round"/></symbol>
+<symbol id="m-perna" viewBox="0 0 40 40"><path d="M13 4h14l1 14c0 5 3 8 3 13 0 4-2 6-2 6h-6l-1-12-1 12h-6s-2-2-2-6c0-5 3-8 3-13Z" fill="#43ff7a"/></symbol>
+<symbol id="m-gluteo" viewBox="0 0 40 40"><path d="M12 6h16c2 6 2 12-1 16-2 3-4 4-7 4s-5-1-7-4c-3-4-3-10-1-16Z" fill="#43ff7a"/></symbol>
+<symbol id="m-panturrilha" viewBox="0 0 40 40"><path d="M15 4h10l2 14c1 6 3 9 3 14 0 3-1 4-1 4h-6l-3-14-3 14H11s-1-1-1-4c0-5 2-8 3-14Z" fill="#2a4536"/><path d="M17 18 C16 24 15 28 14 33" stroke="#43ff7a" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M23 18 C24 24 25 28 26 33" stroke="#43ff7a" stroke-width="4" stroke-linecap="round" fill="none"/></symbol>
+
+<symbol id="ico-check" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6" stroke="#08150d" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs>
+</svg>
+<!-- ============ /ICON LIBRARY ============ -->
+
+<div class="phone">
+  <div class="app-header">
+    <div>
+      <div class="app-title">MEU <span>TREINO</span></div>
+      <div class="app-sub">Danilo · Foco em definição</div>
+    </div>
+    <div class="streak">🔥 <b>6</b>&nbsp;dias</div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+</div>
+
+<script>
+const MUSCLE_ICON = {
+  "Costas":"m-costas","Bíceps":"m-biceps","Peito":"m-peito","Ombro":"m-ombro",
+  "Tríceps":"m-triceps","Quadríceps":"m-perna","Posterior":"m-perna","Glúteo":"m-gluteo",
+  "Adutores":"m-perna","Abdutores":"m-perna","Panturrilha":"m-panturrilha","Abdômen":"m-peito","Cardio":"m-panturrilha"
+};
+
+const DAYS = [
+{
+  day:"Segunda", title:"Costas e Bíceps", muscles:["Costas","Bíceps"],
+  exercises:[
+    {name:"Remada Cavalinho Pegada Aberta", icon:"p-row-machine", muscle:"Costas", sets:"4x8-12", rest:"60s", tag:"warm", tagText:"C/ Aquecimento"},
+    {name:"Crucifixo Inverso Alternado na Máquina", icon:"p-chest-fly-machine", muscle:"Costas", sets:"3x8-12", rest:"60s", tag:"drop", tagText:"Dropset"},
+    {name:"Remada Baixa Unilateral na Máquina", icon:"p-row-machine", muscle:"Costas", sets:"4x10", rest:"40s"},
+    {name:"Pulldown Pegada Aberta", icon:"p-pulldown", muscle:"Costas", sets:"4x8-12", rest:"60s", tag:"drop", tagText:"Dropset"},
+    {name:"Pulldown Pegada Fechada", icon:"p-pulldown", muscle:"Costas", sets:"4x8-12", rest:"60s", tag:"drop", tagText:"Dropset"},
+    {name:"Rosca Alternada com Halteres", icon:"p-curl-db", muscle:"Bíceps", sets:"4x10", rest:"40s"},
+    {name:"Rosca Direta na Polia (Barra Reta)", icon:"p-cable-curl", muscle:"Bíceps", sets:"4x10-12", rest:"60s"},
+    {name:"Rosca Martelo com Halteres", icon:"p-curl-db", muscle:"Bíceps", sets:"4x10-12", rest:"40s"},
+  ],
+  finishers:[
+    {name:"Abdominal Máquina Sentado", icon:"p-abs", muscle:"Abdômen", sets:"4x15", rest:"40s"},
+    {name:"Escada Simulador", icon:"p-stairs", muscle:"Cardio", sets:"20 min", rest:"—"},
+  ]
+},
+{
+  day:"Terça", title:"Peito e Ombro", muscles:["Peito","Ombro"],
+  exercises:[
+    {name:"Supino Reto com Halteres", icon:"p-chest-press-db", muscle:"Peito", sets:"4x8-12", rest:"60s", tag:"warm", tagText:"C/ Aquecimento"},
+    {name:"Supino Declinado com Halteres", icon:"p-chest-press-db", muscle:"Peito", sets:"4x10-12", rest:"60s"},
+    {name:"Peitoral Voador (Máquina)", icon:"p-chest-fly-machine", muscle:"Peito", sets:"4x12", rest:"50s", tag:"drop", tagText:"Dropset"},
+    {name:"Crucifixo na Polia Alta (Cross-over)", icon:"p-crossover", muscle:"Peito", sets:"3x12", rest:"50s"},
+    {name:"Desenvolvimento com Halteres Sentado", icon:"p-shoulder-press", muscle:"Ombro", sets:"4x8-12", rest:"60s"},
+    {name:"Elevação Lateral com Halteres", icon:"p-lateral-raise", muscle:"Ombro", sets:"4x12-15", rest:"45s", tag:"drop", tagText:"Dropset"},
+    {name:"Elevação Frontal com Halteres", icon:"p-front-raise", muscle:"Ombro", sets:"3x12", rest:"45s"},
+  ],
+  finishers:[
+    {name:"Esteira", icon:"p-treadmill", muscle:"Cardio", sets:"15 min", rest:"Ritmo moderado"},
+  ]
+},
+{
+  day:"Quarta", title:"Pernas", muscles:["Quadríceps","Glúteo","Posterior","Panturrilha"],
+  exercises:[
+    {name:"Leg Press 45", icon:"p-leg-press", muscle:"Quadríceps", sets:"4x12", rest:"60s", tag:"warm", tagText:"C/ Aquecimento"},
+    {name:"Cadeira Extensora", icon:"p-leg-ext", muscle:"Quadríceps", sets:"4x12", rest:"45s", tag:"drop", tagText:"Dropset"},
+    {name:"Mesa Flexora", icon:"p-leg-curl", muscle:"Posterior", sets:"4x12", rest:"45s"},
+    {name:"Cadeira Adutora", icon:"p-adductor", muscle:"Adutores", sets:"3x15", rest:"40s"},
+    {name:"Cadeira Abdutora", icon:"p-abductor", muscle:"Abdutores", sets:"3x15", rest:"40s"},
+    {name:"Elevação Pélvica com Halteres no Banco", icon:"p-hip-thrust", muscle:"Glúteo", sets:"4x12", rest:"50s", tag:"drop", tagText:"Dropset"},
+    {name:"Panturrilha no Leg Press 45", icon:"p-calf", muscle:"Panturrilha", sets:"4x15-20", rest:"30s"},
+  ],
+  finishers:[
+    {name:"Bike Ergométrica", icon:"p-bike", muscle:"Cardio", sets:"15 min", rest:"Ritmo leve"},
+  ]
+},
+{
+  day:"Quinta", title:"Costas e Bíceps", muscles:["Costas","Bíceps"],
+  exercises:[
+    {name:"Puxada Alta Pegada Neutra na Polia", icon:"p-pulldown", muscle:"Costas", sets:"4x8-12", rest:"60s", tag:"warm", tagText:"C/ Aquecimento"},
+    {name:"Remada Curvada com Halteres", icon:"p-row-db", muscle:"Costas", sets:"4x10-12", rest:"60s"},
+    {name:"Remada Unilateral com Halter (Serrote)", icon:"p-row-db", muscle:"Costas", sets:"4x10 cada lado", rest:"45s"},
+    {name:"Remada Aberta na Máquina", icon:"p-row-machine", muscle:"Costas", sets:"4x12", rest:"50s", tag:"drop", tagText:"Dropset"},
+    {name:"Pullover na Polia Alta", icon:"p-pulldown", muscle:"Costas", sets:"3x12", rest:"45s"},
+    {name:"Rosca Scott na Máquina", icon:"p-cable-curl", muscle:"Bíceps", sets:"4x10-12", rest:"60s", tag:"drop", tagText:"Dropset"},
+    {name:"Rosca Concentrada com Halter", icon:"p-curl-db", muscle:"Bíceps", sets:"3x12 cada lado", rest:"40s"},
+  ],
+  finishers:[
+    {name:"Abdominal Máquina Sentado", icon:"p-abs", muscle:"Abdômen", sets:"4x15", rest:"40s"},
+    {name:"Esteira", icon:"p-treadmill", muscle:"Cardio", sets:"15 min", rest:"Ritmo moderado"},
+  ]
+},
+{
+  day:"Sexta", title:"Peito e Tríceps", muscles:["Peito","Tríceps"],
+  exercises:[
+    {name:"Supino Inclinado com Halteres", icon:"p-chest-press-db", muscle:"Peito", sets:"4x8-12", rest:"60s", tag:"warm", tagText:"C/ Aquecimento"},
+    {name:"Crucifixo Reto com Halteres", icon:"p-chest-fly-db", muscle:"Peito", sets:"4x12", rest:"50s"},
+    {name:"Supino Máquina (Chest Press)", icon:"p-chest-press-machine", muscle:"Peito", sets:"4x10", rest:"60s", tag:"drop", tagText:"Dropset"},
+    {name:"Tríceps na Polia Barra Reta", icon:"p-triceps-cable", muscle:"Tríceps", sets:"4x8-12", rest:"50s"},
+    {name:"Tríceps na Polia com Corda", icon:"p-triceps-cable", muscle:"Tríceps", sets:"4x10-12", rest:"50s", tag:"drop", tagText:"Dropset"},
+    {name:"Tríceps Francês Unilateral com Halteres", icon:"p-triceps-db", muscle:"Tríceps", sets:"3x10 cada lado", rest:"45s"},
+  ],
+  finishers:[
+    {name:"Corrida na Esteira", icon:"p-treadmill", muscle:"Cardio", sets:"15 min", rest:"Ritmo rápido"},
+  ]
+},
+{
+  day:"Sábado", title:"Pernas", muscles:["Glúteo","Posterior","Quadríceps","Panturrilha"],
+  exercises:[
+    {name:"Leg Press 45 (Pés Altos)", icon:"p-leg-press", muscle:"Glúteo", sets:"4x12", rest:"60s", tag:"warm", tagText:"C/ Aquecimento"},
+    {name:"Cadeira Extensora Unilateral", icon:"p-leg-ext", muscle:"Quadríceps", sets:"4x12 cada lado", rest:"45s"},
+    {name:"Mesa Flexora", icon:"p-leg-curl", muscle:"Posterior", sets:"4x12", rest:"45s", tag:"drop", tagText:"Dropset"},
+    {name:"Stiff com Halteres", icon:"p-stiff", muscle:"Posterior", sets:"4x12", rest:"60s"},
+    {name:"Elevação Pélvica na Máquina", icon:"p-hip-thrust", muscle:"Glúteo", sets:"4x12", rest:"50s", tag:"drop", tagText:"Dropset"},
+    {name:"Cadeira Adutora", icon:"p-adductor", muscle:"Adutores", sets:"3x15", rest:"40s"},
+    {name:"Panturrilha Sentada na Máquina", icon:"p-calf", muscle:"Panturrilha", sets:"4x15-20", rest:"30s"},
+  ],
+  finishers:[
+    {name:"Escada Simulador", icon:"p-stairs", muscle:"Cardio", sets:"15 min", rest:"—"},
+  ]
+},
+];
+
+const tabsEl = document.getElementById('tabs');
+const panelsEl = document.getElementById('panels');
+
+function exCard(ex, idx, dayIdx){
+  const tagHtml = ex.tag ? `<span class="ex-tag ${ex.tag}">${ex.tagText}</span><br>` : '';
+  return `
+  <div class="ex-card" data-day="${dayIdx}" data-idx="${idx}" onclick="toggleDone(this)">
+    <div class="ex-thumb">
+      <svg class="pict"><use href="#${ex.icon}"/></svg>
+      <div class="muscle-tag"><svg><use href="#${MUSCLE_ICON[ex.muscle] || 'm-perna'}"/></svg></div>
+    </div>
+    <div class="ex-info">
+      ${tagHtml}
+      <div class="ex-name">${ex.name}</div>
+      <div class="ex-meta"><b>${ex.sets}</b><span class="dot">•</span>Descanso ${ex.rest}</div>
+    </div>
+    <div class="ex-check"><svg><use href="#ico-check"/></svg></div>
+  </div>`;
+}
+
+DAYS.forEach((d, i) => {
+  tabsEl.innerHTML += `<div class="tab ${i===0?'active':''}" onclick="selectDay(${i})">
+      <div class="d">${d.day}</div><div class="m">${d.title}</div>
+    </div>`;
+
+  const muscleChips = d.muscles.map(m => `
+    <div class="muscle-chip">
+      <div class="badge"><svg width="26" height="26"><use href="#${MUSCLE_ICON[m]}"/></svg></div>
+      <span>${m}</span>
+    </div>`).join('');
+
+  const exCards = d.exercises.map((ex, idx) => exCard(ex, idx, i)).join('');
+  const finCards = d.finishers.map((ex, idx) => exCard(ex, 'f'+idx, i)).join('');
+
+  panelsEl.innerHTML += `
+  <div class="day-panel ${i===0?'active':''}" id="panel-${i}">
+    <div class="day-head">
+      <h2>${d.day} · ${d.title}</h2>
+      <span class="day-count">${d.exercises.length + d.finishers.length} exercícios</span>
+    </div>
+    <div class="muscle-row">${muscleChips}</div>
+    ${exCards}
+    <div class="ex-section-label">Finalizador</div>
+    ${finCards}
+  </div>`;
+});
+
+// footer (shared, follows active day's short name)
+panelsEl.insertAdjacentHTML('afterend', `
+  <div class="footer-bar">
+    <div class="progress-pill" id="progressPill">0/0</div>
+    <button class="start-btn" id="startBtn" onclick="startWorkout()">Iniciar treino</button>
+  </div>
+`);
+
+function selectDay(i){
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  document.querySelectorAll('.day-panel').forEach((p,idx)=>p.classList.toggle('active', idx===i));
+  updateProgress();
+}
+
+function toggleDone(el){
+  el.classList.toggle('done');
+  updateProgress();
+}
+
+function updateProgress(){
+  const activePanel = document.querySelector('.day-panel.active');
+  const cards = activePanel.querySelectorAll('.ex-card');
+  const done = activePanel.querySelectorAll('.ex-card.done').length;
+  document.getElementById('progressPill').textContent = `${done}/${cards.length}`;
+}
+
+function startWorkout(){
+  const activePanel = document.querySelector('.day-panel.active');
+  activePanel.scrollIntoView({behavior:'smooth', block:'start'});
+  const btn = document.getElementById('startBtn');
+  btn.textContent = 'Bom treino 💪';
+  setTimeout(()=> btn.textContent = 'Iniciar treino', 1800);
+}
+
+updateProgress();
+</script>
+</body>
+</html>
